@@ -11,8 +11,8 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, HttpUrl
+from typing import Optional, List
 
 # Example schemas (replace with your own):
 
@@ -37,6 +37,33 @@ class Product(BaseModel):
     price: float = Field(..., ge=0, description="Price in dollars")
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
+
+# UGC Portfolio specific schemas
+
+class Project(BaseModel):
+    """
+    Portfolio projects shown on the site
+    Collection name: "project"
+    """
+    title: str = Field(..., description="Project title")
+    description: Optional[str] = Field(None, description="Short project summary")
+    image_url: Optional[HttpUrl] = Field(None, description="Thumbnail or cover image URL")
+    demo_url: Optional[HttpUrl] = Field(None, description="Live demo link")
+    source_url: Optional[HttpUrl] = Field(None, description="Source code link")
+    author: Optional[str] = Field(None, description="Author or team name")
+    tags: List[str] = Field(default_factory=list, description="List of tags")
+
+class Submission(BaseModel):
+    """
+    User-submitted portfolio entries
+    Collection name: "submission"
+    """
+    name: str = Field(..., description="Submitter name")
+    title: str = Field(..., description="Submission title")
+    description: Optional[str] = Field(None, description="Short description")
+    link: Optional[HttpUrl] = Field(None, description="External or demo link")
+    thumbnail: Optional[HttpUrl] = Field(None, description="Thumbnail image URL")
+    tags: List[str] = Field(default_factory=list, description="Tags for filtering/search")
 
 # Add your own schemas here:
 # --------------------------------------------------
